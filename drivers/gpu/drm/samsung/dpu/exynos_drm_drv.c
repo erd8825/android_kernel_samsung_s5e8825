@@ -138,6 +138,10 @@ static unsigned int exynos_drm_crtc_get_win_cnt(struct drm_crtc_state *crtc_stat
 	   and there are no planes on DSI path*/
 	if (crtc_needs_colormap(crtc_state))
 		num_planes = 1;
+#if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+	else if (to_exynos_crtc_state(crtc_state)->fod_dim)
+		num_planes++;	/* black dim window below the FOD layer */
+#endif
 
 	return num_planes;
 }
@@ -256,7 +260,13 @@ retry:
 		drm_atomic_crtc_state_for_each_plane_state(plane, plane_state,
 				new_crtc_state)
 			if (plane_state->visible)
-				visible_zpos |= BIT(plane_state->normalized_zpos);
+				visible_zpos |= BIT(exynos_fod_dim_shift_zpos(
+						new_exynos_crtc_state,
+						plane_state->normalized_zpos));
+#if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+		if (new_exynos_crtc_state->fod_dim)
+			visible_zpos |= BIT(new_exynos_crtc_state->fod_dim_zpos);
+#endif
 
 		pmask = 1;
 		win_cnt = get_plane_num(dev);
@@ -335,6 +345,84 @@ static int exynos_atomic_add_affected_objects(struct drm_device *dev,
 	return 0;
 }
 
+#if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+static bool exynos_fod_mask_requested(struct drm_atomic_state *state,
+				      struct drm_crtc_state *crtc_state)
+{
+	struct drm_connector *conn =
+		crtc_get_conn(crtc_state, DRM_MODE_CONNECTOR_DSI);
+	struct drm_connector_state *conn_state;
+
+	if (!conn)
+		return false;
+
+	conn_state = drm_atomic_get_new_connector_state(state, conn);
+	if (!conn_state)
+		conn_state = conn->state;
+	if (!conn_state)
+		return false;
+
+	return to_exynos_connector_state(conn_state)->fingerprint_mask;
+}
+
+static int exynos_atomic_check_fod_dim(struct drm_atomic_state *state)
+{
+	struct drm_crtc *crtc;
+	struct drm_crtc_state *old_crtc_state, *new_crtc_state;
+	int i;
+
+	for_each_oldnew_crtc_in_state(state, crtc, old_crtc_state, new_crtc_state, i) {
+		struct exynos_drm_crtc_state *ecs = to_exynos_crtc_state(new_crtc_state);
+		const struct exynos_drm_crtc_state *old_ecs =
+					to_exynos_crtc_state(old_crtc_state);
+		struct drm_connector *conn;
+		struct exynos_drm_connector *econn;
+		struct drm_plane *plane;
+		const struct drm_plane_state *pstate, *fod = NULL;
+		u32 alpha = 0;
+
+		ecs->fod_dim = false;
+		ecs->fod_dim_alpha = 0;
+		ecs->fod_dim_zpos = 0;
+
+		if (!new_crtc_state->active || !exynos_fod_mask_requested(state, new_crtc_state))
+			goto flag;
+
+		conn = crtc_get_conn(new_crtc_state, DRM_MODE_CONNECTOR_DSI);
+		econn = to_exynos_connector(conn);
+		if (!econn->funcs || !econn->funcs->get_fod_dim_alpha)
+			goto flag;
+		if (econn->funcs->get_fod_dim_alpha(econn, &alpha) || !alpha)
+			goto flag;
+
+		drm_atomic_crtc_state_for_each_plane_state(plane, pstate, new_crtc_state) {
+			const struct exynos_drm_plane_state *epstate;
+
+			if (!pstate->visible)
+				continue;
+
+			epstate = to_exynos_plane_state(pstate);
+			if (epstate->fod_layer) {
+				fod = pstate;
+				break;
+			}
+		}
+		if (!fod)
+			goto flag;
+
+		ecs->fod_dim = true;
+		ecs->fod_dim_alpha = alpha;
+		ecs->fod_dim_zpos = fod->normalized_zpos;
+flag:
+		if (old_ecs->fod_dim != ecs->fod_dim ||
+		    old_ecs->fod_dim_zpos != ecs->fod_dim_zpos)
+			new_crtc_state->zpos_changed = true;
+	}
+
+	return 0;
+}
+#endif
+
 #if IS_ENABLED(CONFIG_DRM_MCD_COMMON)
 int exynos_drm_check_frame_skip(struct drm_atomic_state *state)
 {
@@ -389,6 +477,12 @@ int exynos_atomic_check(struct drm_device *dev, struct drm_atomic_state *state)
 	ret = drm_atomic_helper_check_planes(dev, state);
 	if (ret)
 		goto out;
+
+#if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+	ret = exynos_atomic_check_fod_dim(state);
+	if (ret)
+		goto out;
+#endif
 
 	exynos_drm_init_resource_cnt();
 	ret = exynos_atomic_check_windows(dev, state);

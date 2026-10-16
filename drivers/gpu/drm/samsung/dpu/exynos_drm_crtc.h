@@ -207,6 +207,11 @@ struct exynos_drm_crtc_state {
 	unsigned int visible_win_mask;
 	unsigned int freed_win_mask;
 	bool win_inserted;
+#if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+	bool fod_dim;
+	u32 fod_dim_alpha;
+	u32 fod_dim_zpos;
+#endif
 	int64_t dqe_fd;
 	s32 __user *bts_fps_ptr;
 	u32 boost_bts_fps;
@@ -220,6 +225,22 @@ to_exynos_crtc_state(const struct drm_crtc_state *state)
 {
 	return container_of(state, struct exynos_drm_crtc_state, base);
 }
+
+#if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+static inline unsigned int
+exynos_fod_dim_shift_zpos(const struct exynos_drm_crtc_state *state,
+			  unsigned int zpos)
+{
+	return (state->fod_dim && zpos >= state->fod_dim_zpos) ? zpos + 1 : zpos;
+}
+#else
+static inline unsigned int
+exynos_fod_dim_shift_zpos(const struct exynos_drm_crtc_state *state,
+			  unsigned int zpos)
+{
+	return zpos;
+}
+#endif
 
 /*
  * Exynos specific crtc structure.
