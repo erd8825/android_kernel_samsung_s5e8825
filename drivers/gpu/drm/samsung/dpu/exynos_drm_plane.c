@@ -94,6 +94,8 @@ static int exynos_drm_plane_set_property(struct drm_plane *plane,
 		exynos_state->split = val;
 	} else if (property == p->hdr_fd) {
 		exynos_state->hdr_fd = U642I64(val);
+	} else if (property == p->fod_layer) {
+		exynos_state->fod_layer = val;
 	} else {
 		return -EINVAL;
 	}
@@ -125,6 +127,8 @@ static int exynos_drm_plane_get_property(struct drm_plane *plane,
 		*val = exynos_state->split;
 	else if (property == p->hdr_fd)
 		*val = I642U64(exynos_state->hdr_fd);
+	else if (property == p->fod_layer)
+		*val = exynos_state->fod_layer;
 	else
 		return -EINVAL;
 
@@ -454,6 +458,10 @@ static int exynos_drm_plane_create_hdr_fd_property(struct drm_device *drm_dev)
 	if (!p->hdr_fd)
 		return -ENOMEM;
 
+	p->fod_layer = drm_property_create_range(drm_dev, 0, "fod_layer", 0, 1);
+	if (!p->fod_layer)
+		return -ENOMEM;
+
 	return 0;
 }
 
@@ -547,6 +555,7 @@ int exynos_plane_init(struct drm_device *dev,
 		drm_object_attach_property(&plane->base, p->split, EXYNOS_SPLIT_NONE);
 
 	drm_object_attach_property(&plane->base, p->hdr_fd, -1);
+	drm_object_attach_property(&plane->base, p->fod_layer, 0);
 
 	ret = exynos_drm_plane_attach_restriction_property(dev, &plane->base,
 			&config->res);

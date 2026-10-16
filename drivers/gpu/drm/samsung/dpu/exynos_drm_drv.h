@@ -101,6 +101,7 @@ struct exynos_drm_plane_properties {
 	struct drm_property *colormap;
 	struct drm_property *split;
 	struct drm_property *hdr_fd;
+	struct drm_property *fod_layer;
 };
 
 /*
