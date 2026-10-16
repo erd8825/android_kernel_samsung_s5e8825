@@ -657,7 +657,8 @@ static void decon_update_plane(struct exynos_drm_crtc *exynos_crtc,
 
 	decon_debug(decon, "+\n");
 
-	zpos = plane_state->normalized_zpos;
+	zpos = exynos_fod_dim_shift_zpos(to_exynos_crtc_state(crtc_state),
+					 plane_state->normalized_zpos);
 
 	if (!exynos_plane->is_win_connected || crtc_state->zpos_changed) {
 		win_id = decon_get_win_id(exynos_crtc->base.state, zpos);
@@ -865,6 +866,46 @@ static void decon_release_sec_buf(struct decon_device *decon)
 #endif
 
 #if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+static void decon_update_fod_dim(struct decon_device *decon,
+		const struct drm_crtc_state *old_crtc_state,
+		const struct exynos_drm_crtc_state *old_ecs,
+		const struct drm_crtc_state *new_crtc_state,
+		const struct exynos_drm_crtc_state *new_ecs)
+{
+	struct decon_window_regs win_info;
+	int win_id;
+
+	if (decon->id != 0)
+		return;
+
+	if (old_ecs->fod_dim) {
+		win_id = decon_get_win_id(old_crtc_state, old_ecs->fod_dim_zpos);
+		if (win_id >= 0 && !(new_ecs->reserved_win_mask & BIT(win_id)))
+			decon_disable_win(decon, win_id);
+	}
+
+	if (!new_ecs->fod_dim)
+		return;
+
+	win_id = decon_get_win_id(new_crtc_state, new_ecs->fod_dim_zpos);
+	if (win_id < 0 || win_id >= MAX_WIN_PER_DECON) {
+		decon_err(decon, "fod dim: no win for zpos=%u mask=0x%x\n",
+			new_ecs->fod_dim_zpos, new_ecs->reserved_win_mask);
+		return;
+	}
+
+	memset(&win_info, 0, sizeof(win_info));
+	win_info.start_pos = win_start_pos(0, 0);
+	win_info.end_pos = win_end_pos(decon->config.image_width,
+				       decon->config.image_height);
+	win_info.start_time = 0;
+	win_info.colormap = COLOR_MAP_BLACK;
+	win_info.plane_alpha = new_ecs->fod_dim_alpha;
+	win_info.blend = DECON_BLENDING_PREMULT;
+	decon_reg_set_window_control(decon->id, win_id, &win_info, true);
+	decon_reg_set_win_alpha_mult(decon->id, win_id, ALPHA_MULT_SRC_SEL_ALPHA0);
+}
+
 static void decon_fingerprint_mask(struct exynos_drm_crtc *crtc,
 			struct drm_crtc_state *old_crtc_state, u32 after)
 {
@@ -915,9 +956,18 @@ static void decon_fingerprint_mask(struct exynos_drm_crtc *crtc,
 		}
 
 		funcs = ctx->desc->exynos_panel_func;
-		if (!funcs) {
+		if (!funcs || !funcs->set_fingermask_layer) {
 			decon_err(decon, "funcs is null.\n");
 			return;
+		}
+
+		if (to_exynos_crtc_state(crtc->base.state)->fod_dim &&
+		    to_exynos_connector_state(conn_state)->fingerprint_mask) {
+			if (!after)
+				continue;
+			funcs->set_fingermask_layer(ctx, 0);
+			funcs->set_fingermask_layer(ctx, 1);
+			continue;
 		}
 
 		funcs->set_fingermask_layer(ctx, after);
@@ -1024,6 +1074,8 @@ static void decon_atomic_flush(struct exynos_drm_crtc *exynos_crtc,
 		decon_reg_sec_win_shadow_update_req(decon);
 #endif
 #if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+	decon_update_fod_dim(decon, old_crtc_state, old_exynos_crtc_state,
+			     new_crtc_state, new_exynos_crtc_state);
 	exynos_crtc->ops->set_fingerprint_mask(exynos_crtc, old_crtc_state, 0);
 #endif
 	decon_reg_all_win_shadow_update_req(decon->id);
