@@ -46,13 +46,6 @@ enum decon_win_alpha_coef {
 	BND_COEF_1_M_ALPHA_MULT	  = 0xB,
 };
 
-enum decon_win_alpha_sel {
-	ALPHA_MULT_SRC_SEL_ALPHA0 = 0,
-	ALPHA_MULT_SRC_SEL_ALPHA1 = 1,
-	ALPHA_MULT_SRC_SEL_AF = 2,
-	ALPHA_MULT_SRC_SEL_AB = 3,
-};
-
 static struct cal_regs_desc regs_decon[REGS_DECON_TYPE_MAX][REGS_DECON_ID_MAX];
 
 #define decon_regs_desc(id)			(&regs_decon[REGS_DECON][id])
@@ -1542,7 +1535,7 @@ static void decon_reg_set_winmap(u32 id, u32 win_idx, u32 color, u32 en)
 }
 
 /* ALPHA_MULT selection used in (a',b',c',d') coefficient */
-static void decon_reg_set_win_alpha_mult(u32 id, u32 win_idx, u32 a_sel)
+void decon_reg_set_win_alpha_mult(u32 id, u32 win_idx, u32 a_sel)
 {
 	u32 val, mask;
 

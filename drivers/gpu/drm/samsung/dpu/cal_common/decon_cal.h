@@ -282,6 +282,13 @@ void decon_reg_win_enable_and_update(u32 id, u32 win_idx, u32 en);
 void decon_reg_all_win_shadow_update_req(u32 id);
 void decon_reg_set_window_control(u32 id, int win_idx,
 		struct decon_window_regs *regs, u32 winmap_en);
+enum decon_win_alpha_sel {
+	ALPHA_MULT_SRC_SEL_ALPHA0 = 0,
+	ALPHA_MULT_SRC_SEL_ALPHA1 = 1,
+	ALPHA_MULT_SRC_SEL_AF     = 2,
+	ALPHA_MULT_SRC_SEL_AB     = 3,
+};
+void decon_reg_set_win_alpha_mult(u32 id, u32 win_idx, u32 a_sel);
 void decon_reg_update_req_window_mask(u32 id, u32 win_idx);
 void decon_reg_update_req_window(u32 id, u32 win_idx);
 
