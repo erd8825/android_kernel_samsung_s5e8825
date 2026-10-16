@@ -103,6 +103,7 @@ struct exynos_drm_connector_funcs {
 			const struct exynos_drm_connector_state *exynos_conn_state,
 			struct drm_property *property, uint64_t *val);
 	void (*query_status)(struct exynos_drm_connector *exynos_conn);
+	int (*get_fod_dim_alpha)(struct exynos_drm_connector *exynos_conn, u32 *alpha);
 };
 
 struct exynos_drm_connector {

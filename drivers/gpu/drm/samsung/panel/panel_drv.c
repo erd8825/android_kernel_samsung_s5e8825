@@ -6003,6 +6003,45 @@ static int panel_set_mask_layer(struct panel_device *panel, void *arg)
 }
 #endif
 
+#ifdef CONFIG_USDM_PANEL_MASK_LAYER
+static const u8 fod_dim_gamma_lut[33] = {
+	0, 7, 12, 19, 24, 29, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85,
+	90, 94, 99, 104, 108, 115, 124, 135, 145, 157, 169, 177, 183, 188, 194, 200
+};
+
+static int panel_get_fod_dim_alpha(struct panel_device *panel, void *arg)
+{
+	struct panel_bl_device *panel_bl = &panel->panel_bl;
+	u32 *alpha = arg;
+	int mask_br, cur_br, l_mask, l_cur;
+	u32 r, u, idx, y;
+
+	if (!alpha)
+		return -EINVAL;
+
+	*alpha = 0;
+
+	panel_mutex_lock(&panel_bl->lock);
+	mask_br = panel_bl->props.mask_layer_br_target;
+	cur_br = panel_bl->bd->props.brightness;
+	l_mask = (mask_br > 0) ? get_actual_brightness(panel_bl, mask_br) : 0;
+	l_cur = get_actual_brightness(panel_bl, cur_br);
+	panel_mutex_unlock(&panel_bl->lock);
+
+	if (l_mask <= 0 || l_cur <= 0 || l_cur >= l_mask)
+		return 0;
+
+	r = ((u32)l_cur << 16) / (u32)l_mask;
+	u = int_sqrt(r);
+	idx = u >> 3;
+	y = fod_dim_gamma_lut[idx] +
+		((fod_dim_gamma_lut[idx + 1] - fod_dim_gamma_lut[idx]) * (u & 7)) / 8;
+
+	*alpha = 255 - y;
+	return 0;
+}
+#endif
+
 __visible_for_testing int panel_first_frame(struct panel_device *panel)
 {
 	if (!panel)
@@ -7362,6 +7401,7 @@ struct panel_drv_funcs panel_drv_funcs = {
 	.vsync = panel_ioctl_event_vsync,
 #ifdef CONFIG_USDM_PANEL_MASK_LAYER
 	.set_mask_layer = panel_set_mask_layer,
+	.get_fod_dim_alpha = panel_get_fod_dim_alpha,
 #endif
 	.req_set_clock = panel_request_set_clock,
 	.get_ddi_props = panel_get_ddi_props,

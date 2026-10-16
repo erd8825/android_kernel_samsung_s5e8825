@@ -339,10 +339,22 @@ exynos_panel_connector_get_property(struct exynos_drm_connector *exynos_conn,
 	return 0;
 }
 
+#if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+static int mcd_drm_panel_get_fod_dim_alpha(struct exynos_drm_connector *exynos_conn, u32 *alpha)
+{
+	struct exynos_panel *ctx = exynos_connector_to_panel(exynos_conn);
+
+	return call_mcd_panel_func(ctx->mcd_panel_dev, get_fod_dim_alpha, alpha);
+}
+#endif
+
 static const struct exynos_drm_connector_funcs exynos_panel_connector_funcs = {
 	.atomic_print_state = exynos_panel_connector_print_state,
 	.atomic_set_property = exynos_panel_connector_set_property,
 	.atomic_get_property = exynos_panel_connector_get_property,
+#if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+	.get_fod_dim_alpha = mcd_drm_panel_get_fod_dim_alpha,
+#endif
 };
 
 static int exynos_drm_connector_modes(struct drm_connector *connector)
