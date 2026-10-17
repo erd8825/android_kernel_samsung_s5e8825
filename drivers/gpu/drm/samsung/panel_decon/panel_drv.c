@@ -3810,6 +3810,22 @@ static int panel_powerdown_cb(struct panel_device *panel)
 #endif
 
 #ifdef CONFIG_SUPPORT_MASK_LAYER
+#define FOD_HBM_ENTRY_NVSYNC	(2)
+#define FOD_HBM_EXIT_NVSYNC	(1)
+
+static void panel_fod_hbm_wait_vsync(struct panel_device *panel, u32 count)
+{
+	int i, ret;
+
+	for (i = 0; i < count; i++) {
+		ret = panel_dsi_wait_for_vsync(panel, PANEL_WAIT_VSYNC_TIMEOUT_MSEC);
+		if (ret < 0) {
+			panel_err("fod hbm: vsync wait failed (%d/%d)\n", i + 1, count);
+			break;
+		}
+	}
+}
+
 static int panel_set_mask_layer(struct panel_device *panel, void *arg)
 {
 	int ret = 0;
@@ -3842,6 +3858,9 @@ static int panel_set_mask_layer(struct panel_device *panel, void *arg)
 			panel_bl->props.smooth_transition = SMOOTH_TRANS_OFF;
 			panel_bl->props.acl_opr = ACL_OPR_OFF;
 			panel_bl->props.acl_pwrsave = ACL_PWRSAVE_OFF;
+			if (panel->state.cur_state != PANEL_STATE_ALPM)
+				panel_fod_hbm_wait_vsync(panel, FOD_HBM_ENTRY_NVSYNC);
+
 			if (check_seqtbl_exist(&panel->panel_data, PANEL_MASK_LAYER_ENTER_BR_SEQ)
 				&&(panel->state.cur_state != PANEL_STATE_ALPM)) {
 				panel_bl->props.brightness = panel_bl->props.mask_layer_br_target;
@@ -3868,6 +3887,8 @@ static int panel_set_mask_layer(struct panel_device *panel, void *arg)
 			if (check_seqtbl_exist(&panel->panel_data, PANEL_MASK_LAYER_BEFORE_SEQ))
 				panel_do_seqtbl_by_index(panel, PANEL_MASK_LAYER_BEFORE_SEQ);
 			panel_bl->props.mask_layer_br_hook = MASK_LAYER_HOOK_OFF;
+			if (panel->state.cur_state != PANEL_STATE_ALPM)
+				panel_fod_hbm_wait_vsync(panel, FOD_HBM_EXIT_NVSYNC);
 
 			if (check_seqtbl_exist(&panel->panel_data, PANEL_MASK_LAYER_EXIT_BR_SEQ)
 				&& (panel->state.cur_state != PANEL_STATE_ALPM)) {

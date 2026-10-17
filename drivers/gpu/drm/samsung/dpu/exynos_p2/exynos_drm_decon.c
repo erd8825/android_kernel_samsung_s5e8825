@@ -961,15 +961,6 @@ static void decon_fingerprint_mask(struct exynos_drm_crtc *crtc,
 			return;
 		}
 
-		if (to_exynos_crtc_state(crtc->base.state)->fod_dim &&
-		    to_exynos_connector_state(conn_state)->fingerprint_mask) {
-			if (!after)
-				continue;
-			funcs->set_fingermask_layer(ctx, 0);
-			funcs->set_fingermask_layer(ctx, 1);
-			continue;
-		}
-
 		funcs->set_fingermask_layer(ctx, after);
 	}
 }
