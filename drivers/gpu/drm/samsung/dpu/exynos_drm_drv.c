@@ -384,15 +384,9 @@ static int exynos_atomic_check_fod_dim(struct drm_atomic_state *state)
 		ecs->fod_dim = false;
 		ecs->fod_dim_alpha = 0;
 		ecs->fod_dim_zpos = 0;
+		ecs->fod_pressed = false;
 
 		if (!new_crtc_state->active || !exynos_fod_mask_requested(state, new_crtc_state))
-			goto flag;
-
-		conn = crtc_get_conn(new_crtc_state, DRM_MODE_CONNECTOR_DSI);
-		econn = to_exynos_connector(conn);
-		if (!econn->funcs || !econn->funcs->get_fod_dim_alpha)
-			goto flag;
-		if (econn->funcs->get_fod_dim_alpha(econn, &alpha) || !alpha)
 			goto flag;
 
 		drm_atomic_crtc_state_for_each_plane_state(plane, pstate, new_crtc_state) {
@@ -408,6 +402,15 @@ static int exynos_atomic_check_fod_dim(struct drm_atomic_state *state)
 			}
 		}
 		if (!fod)
+			goto flag;
+
+		ecs->fod_pressed = true;
+
+		conn = crtc_get_conn(new_crtc_state, DRM_MODE_CONNECTOR_DSI);
+		econn = to_exynos_connector(conn);
+		if (!econn->funcs || !econn->funcs->get_fod_dim_alpha)
+			goto flag;
+		if (econn->funcs->get_fod_dim_alpha(econn, &alpha) || !alpha)
 			goto flag;
 
 		ecs->fod_dim = true;

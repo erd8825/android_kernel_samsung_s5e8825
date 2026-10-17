@@ -111,6 +111,7 @@ struct exynos_dqe {
 
 	const struct exynos_dqe_funcs *funcs;
 	bool initialized;
+	bool fod_pressed;
 };
 
 void exynos_dqe_dump(struct exynos_dqe *dqe);

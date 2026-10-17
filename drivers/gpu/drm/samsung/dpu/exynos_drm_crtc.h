@@ -208,6 +208,7 @@ struct exynos_drm_crtc_state {
 	unsigned int freed_win_mask;
 	bool win_inserted;
 #if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+	bool fod_pressed;
 	bool fod_dim;
 	u32 fod_dim_alpha;
 	u32 fod_dim_zpos;

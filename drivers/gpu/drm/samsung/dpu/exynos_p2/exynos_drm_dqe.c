@@ -1531,7 +1531,14 @@ static void dqe_set_gamma_matrix(struct exynos_dqe *dqe,
 
 	dqe->ctx.gamma_matrix[7] = GAMMA_MATRIX_OFFSET_2(gamma_mat_lut[15]);
 
-	dqe_ctrl_onoff(&dqe->ctx.gamma_matrix_on, gamma_matrix[0] ? DQE_CTRL_ON : DQE_CTRL_OFF, clrForced);
+#if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+	dqe_ctrl_onoff(&dqe->ctx.gamma_matrix_on,
+		dqe->fod_pressed || !gamma_matrix[0] ? DQE_CTRL_OFF : DQE_CTRL_ON,
+		clrForced);
+#else
+	dqe_ctrl_onoff(&dqe->ctx.gamma_matrix_on,
+		gamma_matrix[0] ? DQE_CTRL_ON : DQE_CTRL_OFF, clrForced);
+#endif
 }
 
 static void dqe_set_gamma_lut(struct exynos_dqe *dqe,
@@ -2865,11 +2872,21 @@ static void __exynos_dqe_update(struct exynos_dqe *dqe,
 				struct drm_crtc_state *crtc_state)
 {
 	u32 updated = DQE_UPDATED_NONE;
+#if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+	bool fod_pressed = to_exynos_crtc_state(crtc_state)->fod_pressed;
+#endif
 
 	dqe_debug(dqe, "+\n");
 
 	updated |= dqe_update_context(dqe, crtc_state);
 	updated |= dqe_update_config(dqe, crtc_state);
+
+#if IS_ENABLED(CONFIG_SUPPORT_MASK_LAYER) || IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+	if (dqe->fod_pressed != fod_pressed) {
+		dqe->fod_pressed = fod_pressed;
+		updated |= DQE_UPDATED_CONTEXT;
+	}
+#endif
 
 	if (unlikely(updated)) {
 		dqe_set_all_luts(dqe);
