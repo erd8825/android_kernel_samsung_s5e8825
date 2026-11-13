@@ -1311,8 +1311,15 @@ static int mcd_drm_panel_set_fingermask_layer(struct exynos_panel *ctx, u32 afte
 	if (ctx->fingerprint_mask == exynos_state->fingerprint_mask)
 		return 0;
 
+#if IS_ENABLED(CONFIG_USDM_PANEL_MASK_LAYER)
+	if (exynos_state->fingerprint_mask)
+		data.req = after ? MASK_LAYER_ON_AFTER : MASK_LAYER_ON_BEFORE;
+	else
+		data.req = after ? MASK_LAYER_OFF_AFTER : MASK_LAYER_OFF_BEFORE;
+#else
 	data.trigger_time = after;
 	data.req_mask_layer = exynos_state->fingerprint_mask;
+#endif
 
 	ret = call_mcd_panel_func(ctx->mcd_panel_dev, set_mask_layer, &data);
 
@@ -1325,8 +1332,8 @@ static int mcd_drm_panel_set_fingermask_layer(struct exynos_panel *ctx, u32 afte
 	}
 
 	panel_info(ctx, "(%s)(%s)\n",
-			data.trigger_time ? "after" : "before",
-			data.req_mask_layer ? "enable" : "disable");
+			after ? "after" : "before",
+			exynos_state->fingerprint_mask ? "enable" : "disable");
 
 	return ret;
 }
