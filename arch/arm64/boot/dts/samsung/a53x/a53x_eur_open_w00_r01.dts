@@ -1602,6 +1602,7 @@
 
 					s6e3fc3_a53x {
 						ddi = <0x24>;
+						ap-vendor-setting = <0x24>;
 						display-mode = <0x25>;
 						power-ctrl = <0x26>;
 						freq-hop = <0x27>;
@@ -10627,6 +10628,7 @@
 
 						s6e3fc3_a53x {
 							ddi = <0x00>;
+							ap-vendor-setting = <0x00>;
 							display-mode = <0x00>;
 							power-ctrl = <0x00>;
 							freq-hop = <0x00>;
