@@ -13,12 +13,7 @@ dtbo-$(CONFIG_SEC_A33X_PROJECT) += \
     a33x/a33x_eur_open_w00_r03.dtbo \
     a33x/a33x_eur_open_w00_r04.dtbo
 
-dtbo-$(CONFIG_SEC_A53X_PROJECT) += \
-    a53x/a53x_eur_open_w00_r00.dtbo \
-    a53x/a53x_eur_open_w00_r01.dtbo \
-    a53x/a53x_eur_open_w00_r02.dtbo \
-    a53x/a53x_eur_open_w00_r05.dtbo \
-    a53x/a53x_eur_open_w00_r06.dtbo
+subdir-$(CONFIG_SEC_A53X_PROJECT) += a53x
 
 dtbo-$(CONFIG_SEC_GTA4XLS_PROJECT) += \
     gta4xls/gta4xls_eur_open_w00_r00.dtbo \
@@ -32,6 +27,6 @@ dtbo-$(CONFIG_SEC_M34X_PROJECT) += \
 targets += dtbs
 always-y := $(dtbo-y)
 
-dtbs: $(addprefix $(obj)/, $(dtbo-y))
+dtbs: $(addprefix $(obj)/, $(dtbo-y) $(subdir-y))
 
 clean-files := *.dtbo*

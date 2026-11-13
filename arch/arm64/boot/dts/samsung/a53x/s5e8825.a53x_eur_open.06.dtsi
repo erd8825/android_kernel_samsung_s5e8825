@@ -1,5 +1,5 @@
 /*
- * SAMSUNG R11S board device tree source
+ * SAMSUNG A53X board device tree source
  *
  * Copyright (c) 2026 Samsung Electronics Co., Ltd.
  *		http://www.samsung.com
@@ -9,23 +9,23 @@
  * published by the Free Software Foundation.
  */
 
-#include "s5e8825.a25x_common.dtsi"
-#include "s5e8825-a25x_pm_00.dtsi"
-#include "camera/s5e8825-a25x-camera_00.dtsi"
-
-#define BOARD_ID	0x1
-#define BOARD_REV	0x0
+#include "s5e8825.a53x_common.dtsi"
+#include "s5e8825-a53x_pm_00.dtsi"
+#include "camera/s5e8825-a53x-camera_eur.dtsi"
 
 / {
-	compatible = "samsung,s5e8825", "samsung,ERD8825";
-	board_id = <BOARD_ID>;
-	board_rev = <BOARD_REV>;
-
 	fragment@model {
 		target-path = "/";
 		__overlay__ {
-			#address-cells = <2>;
-			#size-cells = <1>;
+			model = "Samsung A53X EUR OPEN REV03 based on S5E8825";
 		}; /* end of __overlay__ */
 	}; /* end of fragment */
 }; /* end of root */
+
+&serial_0 {
+	status = "okay";
+};
+
+&dwmmc_2 {
+	card-detect-invert;
+};

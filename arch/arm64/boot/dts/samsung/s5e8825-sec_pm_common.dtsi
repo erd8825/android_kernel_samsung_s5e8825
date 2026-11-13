@@ -12,16 +12,20 @@
 / {
 	fragment@model {
 		target-path = "/";
+
 		__overlay__ {
-			sec_pm_debug {
-				compatible = "samsung,sec-pm-debug";
-				status = "okay";
-			};
+			#address-cells = <2>;
+			#size-cells = <1>;
 
 			secgpio_dvs {
 				compatible = "samsung,s5e8825-secgpio-dvs";
 				status = "okay";
 			};
+
+			sec_pm_debug {
+				compatible = "samsung,sec-pm-debug";
+				status = "okay";
+			};
 		}; /* end of __overlay__ */
 	}; /* end of fragment */
-}; /* end of root */
+};

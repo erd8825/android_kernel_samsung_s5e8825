@@ -1,0 +1,607 @@
+/*
+ * Copyright (c) 2018 Samsung Electronics Co., Ltd.
+ *              http://www.samsung.com
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+*/
+
+/ {
+	/* #include "../display_s6e3fc3_a53x.dtsi" */
+	/* From display_s6e3fc3_a53x.py */
+	/*
+	 * Samsung Exynos SoC series Panel driver
+	 *
+	 * Copyright (c) 2020 Samsung Electronics Co., Ltd
+	 *
+	 * This program is free software; you can redistribute it and/or modify
+	 * it under the terms of the GNU General Public License version 2 as
+	 * published by the Free Software Foundation.
+	 */
+	/*
+	 * SAMSUNG Panel Device Tree Source
+	 *
+	 * Copyright (c) Samsung Electronics Co., Ltd.
+	 *		http://www.samsung.com
+	 *
+	 * This program is free software; you can redistribute it and/or modify
+	 * it under the terms of the GNU General Public License version 2 as
+	 * published by the Free Software Foundation.
+	 */
+	fragment@freq_hop {
+		target-path = "/";
+
+		__overlay__ {
+
+			a53x_freq_hop_table: a53x_freq_hop_table {
+
+				tb1 {
+					id = <1>;
+					range = <0 0>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb2 {
+					id = <2>;
+					range = <0 0>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb3 {
+					id = <3>;
+					range = <0 0>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb4 {
+					id = <4>;
+					range = <0 0>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb5 {
+					id = <0xb>;
+					range = <0x2942 0x2a56>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb6 {
+					id = <0xc>;
+					range = <0x25be 0x261a>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb7 {
+					id = <0xc>;
+					range = <0x261b 0x26d2>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb8 {
+					id = <0xd>;
+					range = <0x48a 0x4a3>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb9 {
+					id = <0xd>;
+					range = <0x4a4 0x5e9>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb10 {
+					id = <0xe>;
+					range = <0x601 0x6ca>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb11 {
+					id = <0xf>;
+					range = <0x1105 0x116a>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb12 {
+					id = <0x11>;
+					range = <0x8bd 0x926>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb13 {
+					id = <0x11>;
+					range = <0x927 0xa03>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb14 {
+					id = <0x12>;
+					range = <0xb79 0xc0f>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb15 {
+					id = <0x12>;
+					range = <0xc10 0xc10>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb16 {
+					id = <0x5b>;
+					range = <0 0x257>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb17 {
+					id = <0x5c>;
+					range = <0x258 0x329>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb18 {
+					id = <0x5c>;
+					range = <0x32a 0x4af>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb19 {
+					id = <0x5d>;
+					range = <0x4b0 0x4fa>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb20 {
+					id = <0x5d>;
+					range = <0x4fb 0x79d>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb21 {
+					id = <0x5e>;
+					range = <0x79e 0x95f>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb22 {
+					id = <0x5f>;
+					range = <0x960 0xa59>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb23 {
+					id = <0x61>;
+					range = <0xabe 0xba8>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb24 {
+					id = <0x61>;
+					range = <0xba9 0xd79>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb25 {
+					id = <0x62>;
+					range = <0xd7a 0xebe>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb26 {
+					id = <0x62>;
+					range = <0xebf 0xed7>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb27 {
+					id = <0x66>;
+					range = <0x1392 0x143b>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb28 {
+					id = <0x67>;
+					range = <0x143c 0x149f>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb29 {
+					id = <0x68>;
+					range = <0x14a0 0x1503>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb30 {
+					id = <0x6b>;
+					range = <0x1662 0x16d9>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb31 {
+					id = <0x6c>;
+					range = <0x16da 0x176f>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb32 {
+					id = <0x6d>;
+					range = <0x1770 0x1805>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb33 {
+					id = <0x6e>;
+					range = <0x1806 0x191d>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb34 {
+					id = <0x6e>;
+					range = <0x191e 0x1931>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb35 {
+					id = <0x6f>;
+					range = <0x1932 0x19c7>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb36 {
+					id = <0x73>;
+					range = <0x1f68 0x2039>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb37 {
+					id = <0x73>;
+					range = <0x203a 0x21f1>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb38 {
+					id = <0x74>;
+					range = <0x21f2 0x234f>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb39 {
+					id = <0x76>;
+					range = <0x23fa 0x25bb>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb40 {
+					id = <0x77>;
+					range = <0x25bc 0x2629>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb41 {
+					id = <0x78>;
+					range = <0x262a 0x268d>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb42 {
+					id = <0x7a>;
+					range = <0x26c0 0x2877>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb43 {
+					id = <0x7c>;
+					range = <0x8d68 0x8dfd>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb44 {
+					id = <0x80>;
+					range = <0x9376 0x9564>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb45 {
+					id = <0x80>;
+					range = <0x9565 0x9569>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb46 {
+					id = <0x81>;
+					range = <0x956a 0x96f9>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb47 {
+					id = <0x82>;
+					range = <0x96fa 0x98a2>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb48 {
+					id = <0x82>;
+					range = <0x98a3 0x9992>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb49 {
+					id = <0x82>;
+					range = <0x9993 0x9ae1>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb50 {
+					id = <0x83>;
+					range = <0x9ae2 0x9b3b>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb51 {
+					id = <0x83>;
+					range = <0x9b3c 0x9fb4>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb52 {
+					id = <0x83>;
+					range = <0x9fb5 0xa0a4>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb53 {
+					id = <0x83>;
+					range = <0xa0a5 0xa275>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb54 {
+					id = <0x84>;
+					range = <0xa276 0xa46f>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb55 {
+					id = <0x84>;
+					range = <0xa470 0xa55f>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb56 {
+					id = <0x84>;
+					range = <0xa560 0xa9d8>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb57 {
+					id = <0x84>;
+					range = <0xa9d9 0xaa45>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb58 {
+					id = <0x8a>;
+					range = <0xd7c8 0xd94e>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb59 {
+					id = <0x8a>;
+					range = <0xd94f 0xda3e>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb60 {
+					id = <0x8a>;
+					range = <0xda3f 0xdda3>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb61 {
+					id = <0x9c>;
+					range = <0x10384 0x10707>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb62 {
+					id = <0xa1>;
+					range = <0x10bea 0x10d47>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb63 {
+					id = <0x33>;
+					range = <0 0>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb64 {
+					id = <0x34>;
+					range = <0 0>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb65 {
+					id = <0x35>;
+					range = <0 0>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb66 {
+					id = <0x36>;
+					range = <0 0>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb67 {
+					id = <0x37>;
+					range = <0 0>;
+					dsi_freq = <0x112a88>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb68 {
+					id = <0x38>;
+					range = <0 0>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb69 {
+					id = <0x3d>;
+					range = <0 0>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb70 {
+					id = <0x3e>;
+					range = <0 0>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb71 {
+					id = <0x47>;
+					range = <0 0>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb72 {
+					id = <0x104>;
+					range = <0x2a6e8 0x2ba5c>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb73 {
+					id = <0x107>;
+					range = <0x2d2a8 0x2e1d0>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb74 {
+					id = <0x107>;
+					range = <0x2e1d1 0x2ecc0>;
+					dsi_freq = <0x1126a0>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb75 {
+					id = <0x107>;
+					range = <0x2ecc1 0x2edec>;
+					dsi_freq = <0x112a88>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb76 {
+					id = <0x11b>;
+					range = <0x25030 0x27344>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+
+				tb77 {
+					id = <0x146>;
+					range = <0x1e208 0x1fd4c>;
+					dsi_freq = <0x10e820>;
+					osc_freq = <0x1baa08>;
+				};
+			};
+		};
+	};
+};
+
+/ {
+	fragment@dsim_freq {
+		target-path = "/";
+
+		__overlay__ {
+
+			dsim_freq_1108: dsim_freq_1108 {
+				hs-clk = <0x454>;
+				pmsk = <2 0xaa 2 0x7627 0xd 4 0 0 0 0 0 0 0 0>;
+				cmd_underrun_lp_ref = <0x83b>;
+			};
+
+			dsim_freq_1124: dsim_freq_1124 {
+				hs-clk = <0x464>;
+				pmsk = <2 0xad 2 0x2c4f 0xd 4 0 0 0 0 0 0 0 0>;
+				cmd_underrun_lp_ref = <0x888>;
+			};
+
+			dsim_freq_1125: dsim_freq_1125 {
+				hs-clk = <0x465>;
+				pmsk = <2 0xad 2 0x13b1 0xd 4 0 0 0 0 0 0 0 0>;
+				cmd_underrun_lp_ref = <0x88d>;
+			};
+		};
+	};
+};

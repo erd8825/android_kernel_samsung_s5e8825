@@ -1204,12 +1204,12 @@
 
 			rear_single_video_hd30_isp = <3>;
 			rear_single_video_hd30_mif = <1>;
-			rear_single_video_hd30_int = <1>;
+			rear_single_video_hd30_int = <2>;
 			rear_single_video_hd30_cpu = CPU_CL0;
 
 			rear_single_video_hd120_isp = <3>;
 			rear_single_video_hd120_mif = <1>;
-			rear_single_video_hd120_int = <1>;
+			rear_single_video_hd120_int = <2>;
 			rear_single_video_hd120_cpu = CPU_CL0;
 
 			rear_single_video_hd240_mif = <0>;

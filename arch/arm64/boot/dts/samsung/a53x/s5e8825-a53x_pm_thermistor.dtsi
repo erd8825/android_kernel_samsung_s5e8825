@@ -12,78 +12,52 @@
 / {
 	fragment@model {
 		target-path = "/";
+
 		__overlay__ {
-			sec_thermistor_0: sec_thermistor@1 {
+			#address-cells = <2>;
+			#size-cells = <1>;
+
+			sec_thermistor_1: sec_thermistor@1 {
 				compatible = "samsung,sec-thermistor";
 				status = "okay";
 				thermistor_name = "sec-ap-thermistor";
 				id = <0>;
-
-				adc_array = < 303 355 415 478 565 640 755 890 1031 1169
-					1340 1552 1753 2007 2220 2416 2744 2943 3149 3320
-					3473 3602 3691>;
+				adc_array = <0x109 0x13b 0x174 0x1b5 0x207 0x264 0x2d1 0x34e 0x3dc 0x47e 0x534 0x5e8 0x6cd 0x7b2 0x89b 0x982 0xa6b 0xb3a 0xbfb 0xca6 0xd39 0xdb0 0xe1a>;
 				temp_array = <900 850 800 750 700 650 600 550 500 450
 						400 350 300 250 200 150 100 50 0 (-50)
 						(-100) (-150) (-200)>;
-
 				io-channels = <&s2mpu13_gpadc 1>;
 				io-channel-names = "adc-ap-temp";
 				io-channel-ranges;
 			};
 
-			sec_thermistor_1: sec_thermistor@4 {
+			sec_thermistor_5: sec_thermistor@5 {
 				compatible = "samsung,sec-thermistor";
 				status = "okay";
-				thermistor_name = "sec-pa-thermistor";
+				thermistor_name = "sec-lte-thermistor";
 				id = <1>;
-
-				adc_array = <367 477 609 747 937 1115 1316 1656 1851 2066
-					2323 2528 2722 2893 3049 3196 3330 3452 3520 3600
-					3673 3734 3787>;
+				adc_array = <0x16d 0x1db 0x25a 0x2f6 0x3ac 0x477 0x552 0x640 0x732 0x822 0x90d 0x9ee 0xab1 0xb69 0xc0d 0xc9d 0xd1a 0xd88 0xde2 0xe36 0xe77 0xeb0 0xee2>;
 				temp_array = <(-200) (-150) (-100) (-50) 0 50 100 150 200 250
 					300 350 400 450 500 550 600 650 700 750
 					800 850 900>;
-
-				io-channels = <&s2mpu13_gpadc 4>;
-				io-channel-names = "adc-pa-temp";
-				io-channel-ranges;
-			};
-
-			sec_thermistor_2: sec_thermistor@5 {
-				compatible = "samsung,sec-thermistor";
-				status = "okay";
-				thermistor_name = "sec-cp-thermistor";
-				id = <2>;
-
-				adc_array = <368 480 609 748 932 1116 1319 1656 1852 2068
-					2325 2529 2724 2895 3049 3197 3330 3453 3521 3602
-					3674 3734 3788>;
-				temp_array = <(-200) (-150) (-100) (-50) 0 50 100 150 200 250
-					300 350 400 450 500 550 600 650 700 750
-					800 850 900>;
-
 				io-channels = <&s2mpu13_gpadc 5>;
-				io-channel-names = "adc-cp-temp";
+				io-channel-names = "adc-lte-temp";
 				io-channel-ranges;
 			};
 
-			sec_thermistor_3: sec_thermistor@6 {
+			sec_thermistor_6: sec_thermistor@6 {
 				compatible = "samsung,sec-thermistor";
 				status = "okay";
 				thermistor_name = "sec-wf-thermistor";
-				id = <3>;
-
-				adc_array = <311 365 422 489 576 650 773 907 1053 1193
-					1364 1576 1776 2033 2249 2453 2764 2967 3166 3339
-					3488 3616 3714>;
+				id = <2>;
+				adc_array = <0x10e 0x140 0x179 0x1bb 0x20c 0x26a 0x2d6 0x353 0x3e2 0x483 0x539 0x5f7 0x6d3 0x7b6 0x89e 0x986 0xa6c 0xb3e 0xbfc 0xca6 0xd39 0xdb1 0xe17>;
 				temp_array = <900 850 800 750 700 650 600 550 500 450
 						400 350 300 250 200 150 100 50 0 (-50)
 						(-100) (-150) (-200)>;
-
 				io-channels = <&s2mpu13_gpadc 6>;
 				io-channel-names = "adc-wf-temp";
 				io-channel-ranges;
 			};
 		}; /* end of __overlay__ */
 	}; /* end of fragment */
-}; /* end of root */
+};

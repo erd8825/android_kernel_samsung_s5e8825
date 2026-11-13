@@ -10,12 +10,4 @@
  */
 
 #include "../s5e8825-sec_pm_common.dtsi"
-#include "s5e8825-a25x_pm_thermistor.dtsi"
-
-/ {
-	fragment@model {
-		target-path = "/";
-		__overlay__ {
-		}; /* end of __overlay__ */
-	}; /* end of fragment */
-}; /* end of root */
+#include "s5e8825-a53x_pm_thermistor.dtsi"
