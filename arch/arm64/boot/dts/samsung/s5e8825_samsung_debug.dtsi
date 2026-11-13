@@ -1,0 +1,89 @@
+/* SAMSUNG s5e8825 board device tree source
+ *
+ * Copyright (c) 2024 Samsung Electronics Co., Ltd.
+ *		http://www.samsung.com
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+/ {
+	fragment@sec_debug {
+		target-path = "/";
+		__overlay__ {
+			sec_debug {
+				compatible = "samsung,sec_debug";
+				status = "okay";
+				memory-region = <&sec_debug_next>;
+			};
+		};
+	};
+
+	fragment@sec_debug_dprt {
+		target-path = "/";
+		__overlay__ {
+			sec_debug_dprt {
+				compatible = "samsung,sec_debug_dprt";
+				status = "okay";
+				bdev_path = "/dev/block/by-name/debug";
+			};
+		};
+	};
+
+	fragment@sec_debug_built {
+		target-path = "/";
+		__overlay__ {
+			sec_debug_built {
+				compatible = "samsung,sec_debug_built";
+				status = "okay";
+				memory-region = <&sec_debug_next>;
+			};
+		};
+	};
+
+	fragment@sec_debug_test {
+		target-path = "/";
+		__overlay__ {
+			sec_debug_test_device {
+				compatible = "samsung,sec_debug_test";
+				status = "okay";
+			};
+		};
+	};
+
+	fragment@sec_debug_reset_reason {
+		target-path = "/";
+		__overlay__ {
+			sec_debug_reset_reason: sec_debug_reset_reason {
+				compatible = "samsung,sec_debug_reset_reason";
+				/*
+				 * power_off_src = [OFFSRC2[0],...,[7],]OFFSRC1[0],...,[7]
+				 * power_on_src = [ONSRC2[0],...,[7],]ONSRC1[0],...,[7]
+				 * rst_stat = RST_STAT[0],...,[31]
+				 */
+				power_off_src = "OI", "RSV1", "RSV2", "RSV3",
+						"RSV4", "RSV5", "RSV6", "RSV7",
+						"SUB_OFF", "TSD", "TIMEOUT", "LDO_SYS_OK",
+						"PWRHOLD", "WTSR_TOUT", "SMPL_TOUT", "UVLOB";
+				power_on_src = "PWRONB", "JIGONB", "ACOKB", "MRST",
+						"ALARM0/1", "INSTACOKB", "SMPL", "WTSR";
+				rst_stat = "CLUSTER0_DBGRSTREQ0", "CLUSTER0_DBGRSTREQ1", "CLUSTER0_DBGRSTREQ2", "CLUSTER0_DBGRSTREQ3",
+                        "CLUSTER1_DBGRSTREQ0", "CLUSTER1_DBGRSTREQ1", "CLUSTER2_DBGRSTREQ0", "CLUSTER2_DBGRSTREQ1",
+                        "RSVD8", "RSVD9", "RSVD10", "RSVD11",
+                        "RSVD12", "RSVD13", "CLUSTER2_WARMRSTREQ0", "CLUSTER2_WARMRSTREQ1",
+                        "PINRESET", "RSVD17", "RSVD18", "RSVD19",
+                        "APM_CPU_WDTRESET", "APM_CPU_SYSRESET", "VTS_CPU_WDTRESET", "CHUB_WDTRESET",
+                        "CLUSTER0_WDTRESET", "CLUSTER2_WDTRESET", "AUD_CPU0_WDTRESET", "SSS_WDTRESET",
+                        "DBGCORE_CPU_WDTRESET", "WRESET", "SWRESET", "PORESET";
+			};
+		};
+	};
+};
+
+&reserved_memory {
+	sec_debug_next: sec_debug_next {
+		reg = <0x0 0x91200000 0x00200000>;
+		no-map;
+	};
+};

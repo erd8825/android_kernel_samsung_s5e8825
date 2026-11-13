@@ -1,0 +1,21 @@
+/*
+ * SAMSUNG S5E8825 Power Management device tree source
+ *
+ * Copyright (c) 2021 Samsung Electronics Co., Ltd.
+ *		http://www.samsung.com
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+#include "../s5e8825-sec_pm_common.dtsi"
+#include "s5e8825-a25x_pm_thermistor.dtsi"
+
+/ {
+	fragment@model {
+		target-path = "/";
+		__overlay__ {
+		}; /* end of __overlay__ */
+	}; /* end of fragment */
+}; /* end of root */

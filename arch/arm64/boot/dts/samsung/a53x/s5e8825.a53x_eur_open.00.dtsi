@@ -1,0 +1,115 @@
+/*
+ * SAMSUNG R11S board device tree source
+ *
+ * Copyright (c) 2026 Samsung Electronics Co., Ltd.
+ *		http://www.samsung.com
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+#include "s5e8825.a25x_common.dtsi"
+#include "s5e8825-a25x_pm_00.dtsi"
+#include "camera/s5e8825-a25x-camera_00.dtsi"
+
+#define BOARD_ID	0x1
+#define BOARD_REV	0x0
+
+/ {
+	compatible = "samsung,s5e8825", "samsung,ERD8825";
+	board_id = <BOARD_ID>;
+	board_rev = <BOARD_REV>;
+
+	fragment@model {
+		target-path = "/";
+		__overlay__ {
+			#address-cells = <2>;
+			#size-cells = <1>;
+
+			sound {
+				compatible = "samsung,exynos8825-rt5691";
+
+				mixer-paths = "mixer_paths_rt5691.xml";
+
+				samsung,routing =
+					"HEADSETMIC", "MICBIAS1",
+					"MAINMIC", "MICBIAS2",
+					"SUBMIC", "MICBIAS3",
+					"IN1P", "HEADSETMIC",
+					"IN1N", "HEADSETMIC",
+					"IN2P", "MAINMIC",
+					"IN2N", "MAINMIC",
+					"IN3P", "SUBMIC",
+					"IN3N", "SUBMIC",
+					"HEADPHONE", "HPOL",
+					"HEADPHONE", "HPOR",
+					"BLUETOOTH SPK", "ABOX UAIF3 Playback",
+					"ABOX UAIF3 Capture", "BLUETOOTH MIC",
+					"USB SPK", "ABOX USB Playback",
+					"ABOX USB Capture", "USB MIC",
+					"FWD SPK", "ABOX FWD Playback",
+					"ABOX FWD Capture", "FWD MIC",
+					"VTS Virtual Output", "VTS Virtual Output Mux",
+					"ABOX SPDY Capture", "VINPUT_FM";
+
+				uaif0 {
+					format = "i2s";
+					cpu {
+						sound-dai = <&abox_uaif_0>;
+					};
+					codec {
+						sound-dai = <&rt5691 0>;
+					};
+				};
+			}; /* end of sound */
+		}; /* end of __overlay__ */
+	}; /* end of fragment */
+}; /* end of root */
+
+&hsi2c_12 {
+	rt5665@1b {
+		status = "disabled";
+	};
+
+	rt5691: rt5691@1b {
+		#sound-dai-cells = <1>;
+
+		compatible = "realtek,rt5691";
+		reg = <0x1b>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&codec_irq>;
+		interrupt-parent = <&gpc2>;
+		interrupts = <0 0 0>;
+
+		realtek,in1-differential;
+		realtek,in2-differential;
+		realtek,in3-differential;
+		realtek,jd-src = <1>;
+		realtek,jd-resistor = <255>;
+		realtek,sar-hs-type = <700>;
+		realtek,sar-pb-vth0 = <94>;
+		realtek,sar-pb-vth1 = <138>;
+		realtek,sar-pb-vth2 = <252>;
+		realtek,sar-pb-vth3 = <580>;
+		realtek,button-clk = <0x00>;
+		realtek,imp_table = <
+			0x000d 3 // 8 ohm
+			0x0019 1 // 16 ohm
+			0x0035 0 // 32 ohm
+			0x0067 0 // 64 ohm
+			0xffff 0 // > 100 ohm
+		>;
+
+		regulator_1v8-supply = <&l22_reg>;
+		regulator_3v3-supply = <&s_l27_reg>;
+
+		realtek,i2c-dbg-cb;
+		realtek,i2c-dbg-retry = <3>;
+
+		realtek,hpa-capless-bias = <0x4646>;
+
+		status = "okay";
+	};
+};

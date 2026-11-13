@@ -1,0 +1,26 @@
+/* SAMSUNG sec_reboot device tree source
+ *
+ * Copyright (c) 2026 Samsung Electronics Co., Ltd.
+ *		http://www.samsung.com
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+
+/ {
+	fragment@model {
+		target-path = "/";
+		__overlay__ {
+			sec-reboot {
+				compatible = "samsung,sec-reboot";
+				samsung,syscon-phandle = <&pmu_system_controller>;
+				shutdown-offset = <0x030C>; /* PS_HOLD_CONTROL */
+				shutdown-trigger = <0x100>; /* PS_HOLD_DATA_BIT */
+				magic-inform = <0x0808>; /* INFORM2 */
+				panic-inform = <0x080C>; /* INFORM3 */
+			};
+		};
+	};
+};
+
